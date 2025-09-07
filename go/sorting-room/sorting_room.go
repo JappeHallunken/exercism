@@ -16,7 +16,7 @@ type NumberBox interface {
 
 // DescribeNumberBox should return a string describing the NumberBox.
 func DescribeNumberBox(nb NumberBox) string {
- return fmt.Sprintf("This is a box containing the number %.1f", float64(nb.Number()))
+	return fmt.Sprintf("This is a box containing the number %.1f", float64(nb.Number()))
 }
 
 type FancyNumber struct {
@@ -52,10 +52,22 @@ func DescribeFancyNumberBox(fnb FancyNumberBox) string {
 		if err == nil {
 			nb = val
 		}
- }
- return fmt.Sprintf("This is a fancy box containing the number %.1f", nb)}
+	}
+	return fmt.Sprintf("This is a fancy box containing the number %.1f", nb)
+}
 
 // DescribeAnything should return a string describing whatever it contains.
 func DescribeAnything(i interface{}) string {
-	panic("Please implement DescribeAnything")
+	switch v := i.(type) {
+	case int:
+		return DescribeNumber(float64(v))
+  case float64:
+    return DescribeNumber(v)
+	case NumberBox:
+		return DescribeNumberBox(v)
+	case FancyNumberBox:
+		return DescribeFancyNumberBox(v)
+	default:
+		return "Return to sender"
+	}
 }
